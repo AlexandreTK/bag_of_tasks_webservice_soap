@@ -2,23 +2,26 @@ package myrepo.server.business;
 
 import java.util.*;
 
-//Map<String, List<Double>> tasks = Collections.synchronizedMap(new HashMap<String, List<Double>>());
-
 public class TaskRepositoryImpl {
 	
+	// Let the application know on which task what slave is currently working.
 	// Hashtable <SlaveID, TaskID>
 	Hashtable<String, String> slaveTask = new Hashtable();
+	
+	// Saves the done tasks
 	// Hashtable <TaskID, ResultValue(ie:[2])>
 	Hashtable<String, List<Double>> doneTasks = new Hashtable();
+	
+	// Saves the tasks to be done
 	// LINKED LIST <TASKID : integer, <VALUES : list of double>>
 	LinkedList<AbstractMap.SimpleEntry<String,List<Double>>> todoTasks = new LinkedList<AbstractMap.SimpleEntry<String,List<Double>>>();  
 	
 	
 	// Keys used:
-	//  * <TASKID-anything>
+	//  * <TASKID>: anything
 	//  * RESULT_<SLAVEID>
 	//  * 
-	// TODO: Return -1 if error...
+	//TODO: Return error if 2 slaves have the same ID. Change the slave code too.
 	public void pairIn(String key, List<Double> value) {
 		if (key.startsWith("RESULT_")) {
 
@@ -39,7 +42,7 @@ public class TaskRepositoryImpl {
 	}
 	
 	// Keys used:
-	//	* <TASKID-anything>
+	//	* <TASKID>: anything
 	//  * DONE_<TASKID>
 	//  * NEXT_<SLAVEID>
 	public List<Double> pairOut(String key) {
@@ -91,7 +94,7 @@ public class TaskRepositoryImpl {
 		}
 
 		else if (key.startsWith("NEXT_")) {
-			
+			// Get next Task
 			String slaveID = key.substring(5);
 			if (!slaveTask.containsKey(slaveID)) {
 				if (!(todoTasks.isEmpty())) {

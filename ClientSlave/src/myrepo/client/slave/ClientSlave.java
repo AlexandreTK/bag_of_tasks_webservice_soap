@@ -27,20 +27,31 @@ public class ClientSlave {
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				continue;
 			}
-			//System.out.println(list);
-			//System.out.println(listSize);
+			System.out.println(list);
+
+			// Summing the elements
+			/*
 			double sum = 0;
 			for ( Double item : list) {
 				sum += item;
 			}
 			list.clear();
 			list.add(sum);
-			//list.add((double) listSize);
+			*/
+			
+			List<Double> row = list.subList(0, list.size()/2);
+			List<Double> column = list.subList(list.size()/2, list.size());
+			double sum = 0;
+			for (int i=0;i<list.size()/2; i++) {
+				sum += row.get(i).doubleValue() * column.get(i).doubleValue();
+			}
+			list.clear();
+			list.add(sum);
+			
 			
 			repository.pairIn("RESULT_"+Integer.toString(slaveID), list);
 		}
